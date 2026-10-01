@@ -1,0 +1,42 @@
+[
+    {
+        "id": 1,
+        "nombre": "Mojitaaaa",
+        "descripcion": "Delicioso cóctel de ron con limón y hierbabuena",
+        "categoria_id": 1,
+        "precio": 18000,
+        "cantidad": 20,
+        "stock_minimo": 4,
+        "activo": true
+    },
+    {
+        "id": 2,
+        "nombre": "Cerveza Club Colombia",
+        "descripcion": "Cerveza nacional.",
+        "categoria_id": 2,
+        "precio": 6000,
+        "cantidad": 30,
+        "stock_minimo": 4,
+        "activo": true
+    },
+    {
+        "id": 3,
+        "nombre": "Vino tinto",
+        "descripcion": "Vino tinto de la casa.",
+        "categoria_id": 4,
+        "precio": 45000,
+        "cantidad": 8,
+        "stock_minimo": 4,
+        "activo": true
+    },
+    {
+        "id": 4,
+        "nombre": "hola",
+        "descripcion": "esta hecho de amor anhaha",
+        "categoria_id": 2,
+        "precio": 15000,
+        "cantidad": 5,
+        "stock_minimo": 4,
+        "activo": true
+    }
+]

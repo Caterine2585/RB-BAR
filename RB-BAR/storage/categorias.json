@@ -1,0 +1,27 @@
+[
+    {
+        "id": 1,
+        "nombre": "Cóctelessdd",
+        "activo": true
+    },
+    {
+        "id": 2,
+        "nombre": "Cervezas",
+        "activo": true
+    },
+    {
+        "id": 3,
+        "nombre": "Licores",
+        "activo": true
+    },
+    {
+        "id": 4,
+        "nombre": "Vinos",
+        "activo": true
+    },
+    {
+        "id": 5,
+        "nombre": "Bebidas sin alcohol",
+        "activo": true
+    }
+]
