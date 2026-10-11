@@ -1169,11 +1169,35 @@ a {
     margin-top: 1.2rem;
 }
 
+#reservation-message {
+    display: none;
+    margin: 0 0 1rem;
+    padding: .75rem;
+    border: 1px solid #d77b7b;
+    background: rgba(169, 74, 74, .18);
+    color: #ffd4d4;
+    font-size: .85rem;
+    line-height: 1.4;
+    text-align: left;
+}
+
+#reservation-message:not(:empty) {
+    display: block;
+}
+
+.reservation-cancel-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .75rem;
+}
+
 /* =========================================
    MODAL DE PAGO CENTRADO
 ========================================= */
 
-#payment-modal {
+#payment-modal,
+#reservation-modal,
+#reservation-cancel-modal {
     position: fixed !important;
     top: 0 !important;
     left: 0 !important;
@@ -1190,7 +1214,9 @@ a {
     background: rgba(0, 0, 0, 0.65);
 }
 
-#payment-modal .payment-modal__content {
+#payment-modal .payment-modal__content,
+#reservation-modal .payment-modal__content,
+#reservation-cancel-modal .payment-modal__content {
     position: relative;
 
     width: min(420px, calc(100% - 30px));

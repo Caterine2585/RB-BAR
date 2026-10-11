@@ -1,2 +1,4 @@
 /storage/logs/*
 /storage/uploads/*
+
+/config/database.local.php

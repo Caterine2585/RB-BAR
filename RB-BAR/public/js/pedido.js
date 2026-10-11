@@ -17,6 +17,7 @@
 
     let mesaActual = null;
     let mesaReservaActual = null;
+    let mesaReservaACancelar = null;
     let modoPedido = null;
 
 
@@ -55,6 +56,9 @@
 
     const reservationModal =
         document.querySelector('#reservation-modal');
+
+    const reservationCancelModal =
+        document.querySelector('#reservation-cancel-modal');
 
     const paymentModal =
         document.querySelector('#payment-modal');
@@ -1762,6 +1766,36 @@
        RESERVACIONES
     ========================================================= */
 
+    function obtenerCapacidadMesa(numeroMesa) {
+
+        const mesa =
+            document.querySelector(
+                `.table-option[data-table="${numeroMesa}"]`
+            );
+
+
+        return Number(
+            mesa?.dataset.capacity || 0
+        );
+    }
+
+
+    function mostrarMensajeReserva(texto) {
+
+        const reservationMessage =
+            reservationModal?.querySelector(
+                '#reservation-message'
+            );
+
+        if (reservationMessage) {
+            reservationMessage.textContent = texto;
+            return;
+        }
+
+        mostrarMensaje(texto);
+    }
+
+
     function abrirReserva(numeroMesa) {
 
         mesaReservaActual =
@@ -1770,6 +1804,15 @@
 
         if (!reservationModal) {
             return;
+        }
+
+        const reservationMessage =
+            reservationModal.querySelector(
+                '#reservation-message'
+            );
+
+        if (reservationMessage) {
+            reservationMessage.textContent = '';
         }
 
 
@@ -1816,6 +1859,14 @@
             obtenerReservaMesa(
                 numeroMesa
             );
+
+        const capacidad =
+            obtenerCapacidadMesa(numeroMesa);
+
+
+        if (people && capacidad > 0) {
+            people.max = String(capacidad);
+        }
 
 
         if (reserva) {
@@ -1892,7 +1943,7 @@
 
         if (!mesaReservaActual) {
 
-            mostrarMensaje(
+            mostrarMensajeReserva(
                 'No se seleccionó una mesa.'
             );
 
@@ -1952,9 +2003,48 @@
                 : '';
 
 
+        if (
+            !Number.isInteger(cantidadPersonas) ||
+            cantidadPersonas < 1
+        ) {
+
+            mostrarMensajeReserva(
+                'La cantidad de personas debe ser un número entero mayor que cero.'
+            );
+
+            return;
+        }
+
+
+        const capacidad =
+            obtenerCapacidadMesa(
+                mesaReservaActual
+            );
+
+
+        if (!capacidad) {
+
+            mostrarMensajeReserva(
+                'No se pudo determinar la capacidad de la mesa.'
+            );
+
+            return;
+        }
+
+
+        if (cantidadPersonas > capacidad) {
+
+            mostrarMensajeReserva(
+                `No se puede realizar la reserva. La Mesa ${mesaReservaActual} tiene capacidad máxima para ${capacidad} personas. Reduce la cantidad de personas o selecciona otra mesa.`
+            );
+
+            return;
+        }
+
+
         if (!nombreCliente) {
 
-            mostrarMensaje(
+            mostrarMensajeReserva(
                 'Escribe el nombre del cliente.'
             );
 
@@ -1964,7 +2054,7 @@
 
         if (!fecha) {
 
-            mostrarMensaje(
+            mostrarMensajeReserva(
                 'Selecciona la fecha.'
             );
 
@@ -1974,21 +2064,8 @@
 
         if (!hora) {
 
-            mostrarMensaje(
+            mostrarMensajeReserva(
                 'Selecciona la hora.'
-            );
-
-            return;
-        }
-
-
-        if (
-            !cantidadPersonas ||
-            cantidadPersonas < 1
-        ) {
-
-            mostrarMensaje(
-                'La cantidad de personas no es válida.'
             );
 
             return;
@@ -2267,13 +2344,55 @@
         }
 
 
-        const confirmar =
-            window.confirm(
-                `¿Cancelar la reserva de la Mesa ${numeroMesa}?`
+        mesaReservaACancelar =
+            Number(numeroMesa);
+
+
+        if (reservationCancelModal) {
+            reservationCancelModal.style.display =
+                'flex';
+        }
+    }
+
+
+    function cerrarConfirmacionCancelacionReserva() {
+
+        if (reservationCancelModal) {
+            reservationCancelModal.style.display =
+                'none';
+        }
+
+        mesaReservaACancelar = null;
+    }
+
+
+    function confirmarCancelacionReserva() {
+
+        const numeroMesa =
+            Number(mesaReservaACancelar);
+
+
+        if (!numeroMesa) {
+            return;
+        }
+
+
+        cerrarConfirmacionCancelacionReserva();
+
+
+        const reservas =
+            obtenerReservas();
+
+        const clave =
+            String(numeroMesa);
+
+
+        if (!reservas[clave]) {
+
+            mostrarMensaje(
+                'No existe una reserva para esta mesa.'
             );
 
-
-        if (!confirmar) {
             return;
         }
 
@@ -3270,6 +3389,39 @@ modal.style.zIndex = '99999';
     }
 
 
+    const cancelReservationConfirmationNoButton =
+        document.querySelector(
+            '#cancel-reservation-confirmation-no'
+        );
+
+    const cancelReservationConfirmationYesButton =
+        document.querySelector(
+            '#cancel-reservation-confirmation-yes'
+        );
+
+
+    if (cancelReservationConfirmationNoButton) {
+
+        cancelReservationConfirmationNoButton.onclick =
+            function (event) {
+
+                event.preventDefault();
+                cerrarConfirmacionCancelacionReserva();
+            };
+    }
+
+
+    if (cancelReservationConfirmationYesButton) {
+
+        cancelReservationConfirmationYesButton.onclick =
+            function (event) {
+
+                event.preventDefault();
+                confirmarCancelacionReserva();
+            };
+    }
+
+
     /* =========================================================
        CERRAR MODALES AL HACER CLICK AFUERA
     ========================================================= */
@@ -3286,6 +3438,20 @@ modal.style.zIndex = '99999';
                 ) {
 
                     cerrarReservaModal();
+                }
+            }
+        );
+    }
+
+
+    if (reservationCancelModal) {
+
+        reservationCancelModal.addEventListener(
+            'click',
+            event => {
+
+                if (event.target === reservationCancelModal) {
+                    cerrarConfirmacionCancelacionReserva();
                 }
             }
         );

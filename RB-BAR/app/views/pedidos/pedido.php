@@ -286,6 +286,13 @@
                 Mesa
             </p>
 
+            <p
+                class="reservation-message"
+                id="reservation-message"
+                role="alert"
+                aria-live="assertive"
+            ></p>
+
 
             <label>
                 Nombre del cliente
@@ -359,6 +366,54 @@
                     id="cancel-reservation-modal"
                 >
                     Cancelar
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================
+         MODAL CONFIRMAR CANCELACIÓN DE RESERVA
+    ========================================== -->
+
+    <div
+        id="reservation-cancel-modal"
+        class="payment-modal"
+        style="display:none;"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="reservation-cancel-title"
+    >
+
+        <div class="payment-modal__content">
+
+            <h2 id="reservation-cancel-title">
+                Cancelar reserva
+            </h2>
+
+            <p>
+                ¿Estás seguro de que deseas cancelar esta reserva?
+            </p>
+
+            <div class="payment-actions reservation-cancel-actions">
+
+                <button
+                    type="button"
+                    class="button button--secondary"
+                    id="cancel-reservation-confirmation-no"
+                >
+                    No, volver
+                </button>
+
+                <button
+                    type="button"
+                    class="button button--danger"
+                    id="cancel-reservation-confirmation-yes"
+                >
+                    Sí, cancelar
                 </button>
 
             </div>
